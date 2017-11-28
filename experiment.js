@@ -59,28 +59,28 @@ var correct_responses = jsPsych.randomization.repeat([
 	["right arrow", 39]
 ], 1)
 var test_stimuli = [{
-	image: '<div class = centerbox><div class = flanker-text><img src="images/ffhff.png" height="200" width="1004"/></div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/ffhff.png" width="100%"/></div></div>',
 	data: {
 		correct_response: 72,
 		condition: 'incompatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text><img src="images/hhfhh.png" height="200" width="1004"/></div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/hhfhh.png" width="100%"/></div></div>',
 	data: {
 		correct_response: 70,
 		condition: 'incompatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text><img src="images/hhhhh.png" height="200" width="1004"/></div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/hhhhh.png" width="100%"/></div></div>',
 	data: {
 		correct_response: 72,
 		condition: 'compatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text><img src="images/fffff.png" height="200" width="1004"/></div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/fffff.png" width="100%"/></div></div>',
 	data: {
 		correct_response: 70,
 		condition: 'compatible',
@@ -153,7 +153,7 @@ var feedback_instruct_block = {
 var instructions_block = {
 	type: 'poldrack-instructions',
 	pages: [
-		"<div class = centerbox><p class = block-text>In this experiment you will see five letters on the string composed of f's and h's. For instance, you might see 'fffff' or 'hhfhh'. Your task is to respond by pressing the key corresponding to the <strong>middle</strong> letter. So if you see 'ffhff' you would press the 'h' key.</p><p class = block-text>After each respond you will get feedback about whether you were correct or not. We will start with a short practice set.</p></div>"
+		"<div class = centerbox><p class = block-text>In this experiment you will see five fish in a line. Some are facing left and some right. You need to feed the fish in the middle of the row and to do this you need to mark which way the fish is looking.  <br /> For instance, you might see <img class='in-line-img' src='images/fffff.png' height='20' width='100'/> or <img class='in-line-img' src='images/hhfhh.png' height='20' width='100'/>. Your task is to respond by pressing the key corresponding to the <strong>middle</strong> fish. So if you see <img class='in-line-img' src='images/ffhff.png' height='20' width='100'/> you would press the 'h' key.</p><p class = block-text>After each respond you will get feedback about whether you were correct or not. We will start with a short practice set.</p></div>"
 	],
 	allow_keys: false,
 	data: {
