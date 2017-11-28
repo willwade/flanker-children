@@ -59,28 +59,28 @@ var correct_responses = jsPsych.randomization.repeat([
 	["right arrow", 39]
 ], 1)
 var test_stimuli = [{
-	image: '<div class = centerbox><div class = flanker-text>ffhff</div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/ffhff.png" height="200" width="1004"/></div></div>',
 	data: {
 		correct_response: 72,
 		condition: 'incompatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text>hhfhh</div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/hhfhh.png" height="200" width="1004"/></div></div>',
 	data: {
 		correct_response: 70,
 		condition: 'incompatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text>hhhhh</div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/hhhhh.png" height="200" width="1004"/></div></div>',
 	data: {
 		correct_response: 72,
 		condition: 'compatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text>fffff</div></div>',
+	image: '<div class = centerbox><div class = flanker-text><img src="images/fffff.png" height="200" width="1004"/></div></div>',
 	data: {
 		correct_response: 70,
 		condition: 'compatible',
