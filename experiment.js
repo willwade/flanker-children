@@ -82,7 +82,7 @@ var test_stimuli = [{
 }, {
 	image: '<div class = centerbox><div class = flanker-text><img src="images/fffff.png" width="100%"/></div></div>',
 	data: {
-		correct_response: 70,
+		correct_response: 72,
 		condition: 'compatible',
 		trial_id: 'stim'
 	}
@@ -153,7 +153,7 @@ var feedback_instruct_block = {
 var instructions_block = {
 	type: 'poldrack-instructions',
 	pages: [
-		"<div class = centerbox><p class = block-text>In this experiment you will see five fish in a line. Some are facing left and some right. You need to feed the fish in the middle of the row and to do this you need to mark which way the fish is looking.  <br /> For instance, you might see <img class='in-line-img' src='images/fffff.png' height='20' width='100'/> or <img class='in-line-img' src='images/hhfhh.png' height='20' width='100'/>. Your task is to respond by pressing the key corresponding to the <strong>middle</strong> fish. So if you see <img class='in-line-img' src='images/ffhff.png' height='20' width='100'/> (middle fish looking right) you would press the 'h' key. If the fish was looking left you would press the 'f' key. </p><p class = block-text>After each respond you will get feedback about whether you were correct or not. We will start with a short practice set.</p></div>"
+		"<div class = centerbox><p class = block-text>In this experiment you will see five fish in a line. Some are facing left and some right. You need to feed the fish in the middle of the row and to do this you need to mark which way the fish is looking.  <br /> For instance, you might see <img class='in-line-img' src='images/fffff.png' height='20' width='100'/> or <img class='in-line-img' src='images/hhfhh.png' height='20' width='100'/>. Your task is to respond by pressing the key corresponding to the <strong>middle</strong> fish. So if you see <img class='in-line-img' src='images/ffhff.png' height='20' width='100'/> (middle fish looking left) you would press the 'f' key. If the fish was looking right you would press the 'h' key. </p><p class = block-text>After each respond you will get feedback about whether you were correct or not. We will start with a short practice set.</p></div>"
 	],
 	allow_keys: false,
 	data: {
