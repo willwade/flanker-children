@@ -54,55 +54,47 @@ var sumInstructTime = 0 //ms
 var instructTimeThresh = 0 ///in seconds
 
 // task specific variables
-var correct_responses = jsPsych.randomization.repeat([
-	["left arrow", 37],
-	["right arrow", 39]
-], 1)
-var test_stimuli = [{
-	image: '<div class = centerbox><div class = flanker-text><img src="images/ffhff.png" width="100%"/></div></div>',
+var head_left_keys = [72,39]
+var head_right_keys = [70,37]
+var all_keys = [].concat(head_left_keys, head_right_keys)
+window.test_stimuli = [{
+	image_url: 'images/ffhff.png',
 	data: {
-		correct_response: 70,
+		correct_response: head_right_keys,
 		condition: 'incompatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text><img src="images/hhfhh.png" width="100%"/></div></div>',
+	image_url: 'images/hhfhh.png',
 	data: {
-		correct_response: 72,
+		correct_response: head_left_keys,
 		condition: 'incompatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text><img src="images/hhhhh.png" width="100%"/></div></div>',
+	image_url: 'images/hhhhh.png',
 	data: {
-		correct_response: 70,
+		correct_response: head_right_keys,
 		condition: 'compatible',
 		trial_id: 'stim'
 	}
 }, {
-	image: '<div class = centerbox><div class = flanker-text><img src="images/fffff.png" width="100%"/></div></div>',
+	image_url: 'images/fffff.png',
 	data: {
-		correct_response: 72,
+		correct_response: head_left_keys,
 		condition: 'compatible',
 		trial_id: 'stim'
 	}
 }];
-
-practice_len = 5 //5
-exp_len = 25 //5
-var practice_trials = jsPsych.randomization.repeat(test_stimuli, practice_len / 4, true);
-var test_trials = jsPsych.randomization.repeat(test_stimuli, exp_len / 4, true);
-
-var practice_response_array = [];
-for (i = 0; i < practice_trials.data.length; i++) {
-	practice_response_array.push(practice_trials.data[i].correct_response)
-}
-
-var test_response_array = [];
-for (i = 0; i < test_trials.data.length; i++) {
-	test_response_array.push(test_trials.data[i].correct_response)
-}
-
+// define images
+$.each(test_stimuli, function() {
+  this.image = new Image();
+  this.image.src = this.image_url
+})
+var practice_len = 1 //5
+var exp_len = 4 //5
+var practice_trials = jsPsych.randomization.repeat(test_stimuli, Math.ceil(practice_len / test_stimuli.length)).slice(0, practice_len);
+var test_trials = jsPsych.randomization.repeat(test_stimuli, Math.ceil(exp_len / test_stimuli.length)).slice(0, exp_len);
 
 /* ************************************ */
 /* Set up jsPsych blocks */
@@ -184,6 +176,31 @@ var instruction_node = {
 	}
 }
 
+function compute_experiment_summary() {
+  var trials = jsPsych.data.getTrialsOfType('poldrack-categorize');
+  var count = 0;
+  var sum_rt = 0;
+  var correct_trial_count = 0;
+  var correct_rt_count = 0;
+  for (var i = 0; i < trials.length; i++) {
+    var trial = trials[i]
+    if(trial.exp_stage == "test") {
+      count++;
+      if(trial.correct == true) {
+        correct_trial_count++;
+        if(trial.rt > -1){
+          sum_rt += trial.rt;
+          correct_rt_count++;
+        }
+      }
+    }
+  }
+  return {
+    rt: Math.floor(sum_rt / correct_rt_count),
+    accuracy: Math.floor(correct_trial_count / count * 100)
+  }
+}
+
 var end_block = {
 	type: 'poldrack-text',
 	timing_response: 180000,
@@ -191,7 +208,12 @@ var end_block = {
 		trial_id: "end",
 		exp_id: 'flanker'
 	},
-	text: '<div class = centerbox><p class = center-block-text>Thanks for completing this task!</p><p class = center-block-text>Press <strong>enter</strong> to continue.</p></div>',
+	text: function() {
+    var data = compute_experiment_summary()
+    return "<p>You responded correctly on "+data.accuracy+"% of the trials. " +
+      "Your average response time was <strong>" + data.rt + "ms</strong>. Press enter to complete the "+
+      "experiment. Thank you!</p>"
+  },
 	cont_key: [13],
 	timing_post_trial: 0
 };
@@ -226,16 +248,16 @@ flanker_experiment = []
 flanker_experiment.push(instruction_node);
 for (i = 0; i < practice_len; i++) {
 	flanker_experiment.push(fixation_block)
+  var practice_trial = practice_trials[i]
 	var practice_block = {
 		type: 'poldrack-categorize',
-		stimulus: practice_trials.image[i],
-		is_html: true,
-		key_answer: practice_response_array[i],
+		stimulus: practice_trial.image,
+		key_answer: practice_trial.data.correct_response,
 		correct_text: '<div class = centerbox><div style="color:green"; class = center-text>Correct!</div></div>',
 		incorrect_text: '<div class = centerbox><div style="color:red"; class = center-text>Incorrect</div></div>',
 		timeout_message: '<div class = centerbox><div class = flanker-text>Respond faster</div></div>',
-		choices: [70, 72],
-		data: practice_trials.data[i],
+		choices: all_keys,
+		data: practice_trial.data,
 		timing_feedback_duration: 1000,
 		show_stim_with_feedback: false,
 		timing_response: 1500,
@@ -253,17 +275,17 @@ flanker_experiment.push(start_test_block)
 
 /* define test block */
 for (i = 0; i < exp_len; i++) {
+  var test_trial = test_trials[i];
 	flanker_experiment.push(fixation_block)
 	var test_block = {
 		type: 'poldrack-categorize',
-		stimulus: test_trials.image[i],
-		is_html: true,
-		key_answer: test_response_array[i],
+		stimulus: test_trial.image,
+		key_answer: test_trial.data.correct_response,
 		correct_text: '<div class = centerbox><div style="color:green"; class = center-text>Correct!</div></div>',
 		incorrect_text: '<div class = centerbox><div style="color:red"; class = center-text>Incorrect</div></div>',
 		timeout_message: '<div class = centerbox><div class = flanker-text>Respond faster!</div></div>',
-		choices: [70, 72],
-		data: test_trials.data[i],
+		choices: all_keys,
+		data: test_trial.data,
 		timing_feedback_duration: 1000,
 		timing_response: 1500,
 		show_stim_with_feedback: false,
