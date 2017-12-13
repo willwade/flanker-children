@@ -42,20 +42,33 @@ jsPsych.plugins["poldrack-categorize"] = (function() {
     // that need to be cleared if the trial ends early
     var setTimeoutHandlers = [];
 
-    if (!trial.is_html) {
-      // add image to display
-      display_element.append($('<img>', {
-        "src": trial.stimulus,
-        "class": 'jspsych-poldrack-categorize-stimulus',
-        "id": 'jspsych-poldrack-categorize-stimulus'
-      }));
-    } else {
-      display_element.append($('<div>', {
-        "id": 'jspsych-poldrack-categorize-stimulus',
-        "class": 'jspsych-poldrack-categorize-stimulus',
-        "html": trial.stimulus
-      }));
+    function display_stimulus() {
+      if (!trial.is_html) {
+        // add image to display
+        if(trial.stimulus instanceof HTMLElement) {
+          var div = $('<div>', {
+            "class": 'jspsych-poldrack-categorize-stimulus',
+            "id": 'jspsych-poldrack-categorize-stimulus'
+          });
+          div.append(trial.stimulus)
+          display_element.append(div);
+        } else {
+          display_element.append($('<img>', {
+            "src": trial.stimulus,
+            "class": 'jspsych-poldrack-categorize-stimulus',
+            "id": 'jspsych-poldrack-categorize-stimulus'
+          }));
+        }
+      } else {
+        display_element.append($('<div>', {
+          "id": 'jspsych-poldrack-categorize-stimulus',
+          "class": 'jspsych-poldrack-categorize-stimulus',
+          "html": trial.stimulus
+        }));
+      }
     }
+    
+    display_stimulus()
 
     // hide image after time if the timing parameter is set
     if (trial.timing_stim > 0) {
@@ -86,7 +99,7 @@ jsPsych.plugins["poldrack-categorize"] = (function() {
       // clear keyboard listener
       jsPsych.pluginAPI.cancelAllKeyboardResponses();
       var correct = false;
-      if (trial.key_answer == info.key) {
+      if (trial.key_answer.indexOf(info.key) != -1) {
         correct = true;
       }
 
@@ -166,20 +179,7 @@ jsPsych.plugins["poldrack-categorize"] = (function() {
       } else {
         // show image during feedback if flag is set
         if (trial.show_stim_with_feedback) {
-          if (!trial.is_html) {
-            // add image to display
-            display_element.append($('<img>', {
-              "src": trial.stimulus,
-              "class": 'jspsych-poldrack-categorize-stimulus',
-              "id": 'jspsych-poldrack-categorize-stimulus'
-            }));
-          } else {
-            display_element.append($('<div>', {
-              "id": 'jspsych-poldrack-categorize-stimulus',
-              "class": 'jspsych-poldrack-categorize-stimulus',
-              "html": trial.stimulus
-            }));
-          }
+          display_stimulus()
         }
 
         // substitute answer in feedback string.
