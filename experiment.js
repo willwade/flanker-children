@@ -92,7 +92,7 @@ $.each(test_stimuli, function() {
   this.image.src = this.image_url
 })
 var practice_len = 5 //5
-var exp_len = 25 //5
+var exp_len = 152 //5
 var practice_trials = jsPsych.randomization.repeat(test_stimuli, Math.ceil(practice_len / test_stimuli.length)).slice(0, practice_len);
 var test_trials = jsPsych.randomization.repeat(test_stimuli, Math.ceil(exp_len / test_stimuli.length)).slice(0, exp_len);
 
